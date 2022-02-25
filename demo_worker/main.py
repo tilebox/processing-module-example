@@ -124,8 +124,6 @@ def new_task(command: str, *args, logical_dependencies: Optional[List[str]] = No
     for arg in args:
         cmd.append(str(arg))
 
-    id = subprocess.check_output(cmd).decode('UTF-8').strip()
-    print("submitted command: ", cmd, "\nreceived task id: ", id)
-    return id
-
-
+    identifier = subprocess.check_output(cmd).decode('UTF-8').strip()
+    print("submitted command: ", cmd, "\nreceived task id: ", identifier)
+    return identifier
