@@ -4,23 +4,30 @@ version = "0.1.0"
 description = ""
 authors = ["Stefan Amberger <1277330+snamber@users.noreply.github.com>"]
 
+[[tool.poetry.source]]
+name = "adler"
+url = "https://pypi.adler-x.snamber.com"
+default = true
+
+[[tool.poetry.source]]
+name = "pypi_"
+url = "https://pypi.python.org/simple"
+secondary = true
+
 [tool.poetry.dependencies]
 python = "^3.8"
 matplotlib = "^3.5.1"
 numpy = "^1.22.2"
-google-cloud-storage = "^2.1.0"
+adler-x-task = "^0.2.0"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.12.2"
 pytest = "^7.0.1"
-jupyter-http-over-ws = "^0.0.8"
-jupyterlab = "^3.2.9"
 
 [tool.poetry.scripts]
 calculate-julia = "demo_worker.main:calculate_julia"
 combine-outputs = "demo_worker.main:combine_outputs"
 save-figure = "demo_worker.main:save_figure"
-env = "demo_worker.main:env"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

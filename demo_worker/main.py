@@ -1,11 +1,13 @@
 import os
-import subprocess
 import sys
-from typing import List, Optional
 
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
+from adler_x_task.cache import LocalCache
+from adler_x_task.tasks import new_task, current_task_id
+
+cache = LocalCache()
 
 
 def env():
@@ -15,18 +17,21 @@ def env():
 def calculate_julia():
     """ calculate starts """
     print("started calculation of julia sub-set")
-    size, start, end = int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])
+    size, start, end, name = int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]), sys.argv[4]
 
     if size * (end - start) < 500_000:
         arr = julia(size, start, end)
-        np.save("output.npy", arr)
+        cache.save(arr, "output")
+        if size == end - start:
+            new_task("save-figure", current_task_id(), size, name)
     else:
         mid = int(start + (end - start) / 2)
-        task1 = new_task("calculate-julia", size, start, mid)
-        task2 = new_task("calculate-julia", size, mid, end)
-        task3 = new_task("combine-outputs", task1, task2, data_dependencies=[task1, task2])
+        task1 = new_task("calculate-julia", size, start, mid, name)
+        task2 = new_task("calculate-julia", size, mid, end, name)
+        task3 = new_task("combine-outputs", task1, task2, current_task_id(), dependencies=[task1, task2])
         if size == end - start:  # final task
-            new_task("save-figure", task3, size, data_dependencies=[task3])
+            print("saving figure")
+            new_task("save-figure", current_task_id(), size, name, dependencies=[task3])
 
 
 def concatenate_rows(rows_top, rows_bottom: np.array) -> np.array:
@@ -36,7 +41,8 @@ def concatenate_rows(rows_top, rows_bottom: np.array) -> np.array:
 def save_figure():
     task = sys.argv[1]
     imsize = int(sys.argv[2])
-    arr = np.load(f"../{task}/output.npy")
+    name = sys.argv[3]
+    arr = cache.load(task, "output")
 
     im_width, im_height = imsize, imsize
 
@@ -46,7 +52,7 @@ def save_figure():
     y_height = y_max - y_min
 
     # Create the image
-    fig, ax = plt.subplots(figsize=(20, 20))
+    fig, ax = plt.subplots(figsize=(imsize / 100, imsize / 100), dpi=100)
     ax.imshow(arr, interpolation='nearest', cmap=cm.hot)
     # Set the tick labels to the coordinates of z0 in the complex plane
     xtick_labels = np.linspace(x_min, x_max, int(x_width / 0.5))
@@ -55,25 +61,18 @@ def save_figure():
     ytick_labels = np.linspace(y_min, y_max, int(y_height / 0.5))
     ax.set_yticks([(y - y_min) / y_height * im_height for y in ytick_labels])
     ax.set_yticklabels(['{:.1f}'.format(ytick) for ytick in ytick_labels])
-    filename = f"../julia-{im_width}x{im_height}.png"  # TODO update
-    plt.savefig(filename)
-
-    # Upload the image
-    # client = storage.Client()
-    # bucket_name = "demo-worker-output"  # TODO update
-    # bucket = client.bucket(bucket_name)
-    # blob = bucket.blob(filename)
-    # blob.upload_from_filename(filename)
-    # print(f"file uploaded to {bucket_name}/{filename}")
+    plt.savefig(f"/Users/snamber/work/adler-x/demo-worker/{name}")  # TODO make configurable
 
 
 def combine_outputs() -> np.array:
-    task1, task2 = sys.argv[1], sys.argv[2]
+    task1, task2, destination = sys.argv[1], sys.argv[2], sys.argv[3]
 
-    arr1 = np.load(f"../{task1}/output.npy")
-    arr2 = np.load(f"../{task2}/output.npy")
+    print("reading output of previous tasks")
+    arr1 = cache.load(task1, "output")
+    arr2 = cache.load(task2, "output")
 
-    np.save("output.npy", concatenate_rows(arr1, arr2))
+    cache.save(concatenate_rows(arr1, arr2), "output")
+    print(f"saved combined output")
 
 
 def julia(imsize, start, end: int) -> np.array:
@@ -101,29 +100,6 @@ def julia(imsize, start, end: int) -> np.array:
             while abs(z) <= z_abs_max and nit < nit_max:
                 z = z ** 2 + c
                 nit += 1
-            shade = 1 - np.sqrt(nit / nit_max)
             ratio = nit / nit_max
             arr[ix, iy - start] = ratio
     return arr
-
-
-def new_task(command: str, *args, logical_dependencies: Optional[List[str]] = None,
-             data_dependencies: Optional[List[str]] = None) -> str:
-    """new_task dispatches a new task and returns the task identifier as a string"""
-
-    cmd = ["adler-x-task", "create-task"]
-    if logical_dependencies is not None:
-        cmd.append("--logically-depends-on")
-        cmd.append(",".join(logical_dependencies))
-    if data_dependencies is not None:
-        cmd.append("--depends-on-data-from")
-        cmd.append(",".join(data_dependencies))
-
-    cmd.append("--")
-    cmd.append(command)
-    for arg in args:
-        cmd.append(str(arg))
-
-    identifier = subprocess.check_output(cmd).decode('UTF-8').strip()
-    print("submitted command: ", cmd, "\nreceived task id: ", identifier)
-    return identifier
