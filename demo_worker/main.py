@@ -28,10 +28,10 @@ def calculate_julia():
         mid = int(start + (end - start) / 2)
         task1 = new_task("calculate-julia", size, start, mid, name)
         task2 = new_task("calculate-julia", size, mid, end, name)
-        task3 = new_task("combine-outputs", task1, task2, current_task_id(), dependencies=[task1, task2])
+        task3 = new_task("combine-outputs", task1, task2, dependencies=[task1, task2])
         if size == end - start:  # final task
             print("saving figure")
-            new_task("save-figure", current_task_id(), size, name, dependencies=[task3])
+            new_task("save-figure", task3, size, name, dependencies=[task3])
 
 
 def concatenate_rows(rows_top, rows_bottom: np.array) -> np.array:
@@ -65,14 +65,13 @@ def save_figure():
 
 
 def combine_outputs() -> np.array:
-    task1, task2, destination = sys.argv[1], sys.argv[2], sys.argv[3]
+    task1, task2 = sys.argv[1], sys.argv[2]
 
-    print("reading output of previous tasks")
+    print("combining output of previous tasks")
     arr1 = cache.load(task1, "output")
     arr2 = cache.load(task2, "output")
 
     cache.save(concatenate_rows(arr1, arr2), "output")
-    print(f"saved combined output")
 
 
 def julia(imsize, start, end: int) -> np.array:
