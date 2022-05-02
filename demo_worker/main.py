@@ -4,8 +4,8 @@ import sys
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
-from adler_x_task.cache import LocalCache
-from adler_x_task.tasks import new_task, current_task_id
+from tilebox_processing.cache import LocalCache
+from tilebox_processing.tasks import new_task, current_task_id
 
 cache = LocalCache()
 
@@ -64,7 +64,7 @@ def save_figure():
     plt.savefig(f"/Users/snamber/work/adler-x/demo-worker/{name}")  # TODO make configurable
 
 
-def combine_outputs() -> np.array:
+def combine_outputs():
     task1, task2 = sys.argv[1], sys.argv[2]
 
     print("combining output of previous tasks")

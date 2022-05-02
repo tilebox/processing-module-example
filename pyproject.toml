@@ -18,7 +18,8 @@ secondary = true
 python = "^3.8"
 matplotlib = "^3.5.1"
 numpy = "^1.22.2"
-adler-x-task = "^0.2.0"
+tilebox-processing = {path = "/Users/snamber/work/adler-x/py-adler-x-task", develop = true}
+typer = "^0.4.1"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.12.2"
