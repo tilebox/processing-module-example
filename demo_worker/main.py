@@ -21,17 +21,17 @@ def calculate_julia():
 
     if size * (end - start) < 500_000:
         arr = julia(size, start, end)
-        cache.save(arr, "output")
+        cache.save(current_task_id(), arr, "output")
         if size == end - start:
             new_task("save-figure", current_task_id(), size, name)
     else:
         mid = int(start + (end - start) / 2)
         task1 = new_task("calculate-julia", size, start, mid, name)
         task2 = new_task("calculate-julia", size, mid, end, name)
-        task3 = new_task("combine-outputs", task1, task2, dependencies=[task1, task2])
+        task3 = new_task("combine-outputs", current_task_id(), task1, task2, dependencies=[task1, task2])
         if size == end - start:  # final task
             print("saving figure")
-            new_task("save-figure", task3, size, name, dependencies=[task3])
+            new_task("save-figure", current_task_id(), size, name, dependencies=[task3])
 
 
 def concatenate_rows(rows_top, rows_bottom: np.array) -> np.array:
@@ -61,17 +61,17 @@ def save_figure():
     ytick_labels = np.linspace(y_min, y_max, int(y_height / 0.5))
     ax.set_yticks([(y - y_min) / y_height * im_height for y in ytick_labels])
     ax.set_yticklabels(['{:.1f}'.format(ytick) for ytick in ytick_labels])
-    plt.savefig(f"/Users/snamber/work/adler-x/demo-worker/{name}")  # TODO make configurable
+    plt.savefig(f"../{name}")
 
 
 def combine_outputs():
-    task1, task2 = sys.argv[1], sys.argv[2]
+    target, task1, task2 = sys.argv[1], sys.argv[2], sys.argv[3]
 
     print("combining output of previous tasks")
     arr1 = cache.load(task1, "output")
     arr2 = cache.load(task2, "output")
 
-    cache.save(concatenate_rows(arr1, arr2), "output")
+    cache.save(target, concatenate_rows(arr1, arr2), "output")
 
 
 def julia(imsize, start, end: int) -> np.array:

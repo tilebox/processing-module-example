@@ -16,8 +16,7 @@ pyenv-init
 pyenv shell 3.8-dev
 poetry shell
 
-CACHE_DIRECTORY=<cache_directory>
-    tilebox-processing node \
+CACHE_DIRECTORY=<cache_directory> tilebox-processing node \
     --tilebox-processing-namespace-id <namespace_id> \
     --tilebox-processing-namespace-token <namespace_token>
 ```
