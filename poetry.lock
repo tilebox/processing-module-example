@@ -224,18 +224,18 @@ reference = "pypi_"
 
 [[package]]
 name = "google-cloud-core"
-version = "2.3.1"
+version = "2.3.2"
 description = "Google Cloud API client core library"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
-google-api-core = ">=1.31.5,<2.0.0 || >2.3.0,<3.0.0dev"
+google-api-core = ">=1.31.6,<2.0.0 || >2.3.0,<3.0.0dev"
 google-auth = ">=1.25.0,<3.0dev"
 
 [package.extras]
-grpc = ["grpcio (>=1.8.2,<2.0dev)"]
+grpc = ["grpcio (>=1.38.0,<2.0dev)"]
 
 [package.source]
 type = "legacy"
@@ -729,15 +729,15 @@ version = "0.2.1"
 description = ""
 category = "main"
 optional = false
-python-versions = "^3.7"
-develop = true
+python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-google-cloud-storage = "^2.3.0"
+google-cloud-storage = ">=2.3.0,<3.0.0"
 
 [package.source]
-type = "directory"
-url = "../py-tilebox-processing"
+type = "legacy"
+url = "https://pypi.adler-x.snamber.com"
+reference = "tilebox"
 
 [[package]]
 name = "tomli"
@@ -834,7 +834,7 @@ reference = "pypi_"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "97d6f405d39e23ccf53fb465f20c5de89e91ad6d0dece864c41744d2ec7d9034"
+content-hash = "42f5469214ad941f07589b3349965fde61b5770325445c23b9c8c3615a5ca456"
 
 [metadata.files]
 astroid = [
@@ -889,8 +889,8 @@ google-auth = [
     {file = "google_auth-2.9.1-py2.py3-none-any.whl", hash = "sha256:5a7eed0cb0e3a83989fad0b59fe1329dfc8c479543039cd6fd1e01e9adf39475"},
 ]
 google-cloud-core = [
-    {file = "google-cloud-core-2.3.1.tar.gz", hash = "sha256:34334359cb04187bdc80ddcf613e462dfd7a3aabbc3fe4d118517ab4b9303d53"},
-    {file = "google_cloud_core-2.3.1-py2.py3-none-any.whl", hash = "sha256:113ba4f492467d5bd442c8d724c1a25ad7384045c3178369038840ecdd19346c"},
+    {file = "google-cloud-core-2.3.2.tar.gz", hash = "sha256:b9529ee7047fd8d4bf4a2182de619154240df17fbe60ead399078c1ae152af9a"},
+    {file = "google_cloud_core-2.3.2-py2.py3-none-any.whl", hash = "sha256:8417acf6466be2fa85123441696c4badda48db314c607cf1e5d543fa8bdc22fe"},
 ]
 google-cloud-storage = [
     {file = "google-cloud-storage-2.4.0.tar.gz", hash = "sha256:5fe26f1381b30e3cc328f46e13531ca8525458f870c1e303c616bdeb7b7f5c66"},

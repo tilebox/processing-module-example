@@ -5,7 +5,7 @@ description = ""
 authors = ["Stefan Amberger <1277330+snamber@users.noreply.github.com>"]
 
 [[tool.poetry.source]]
-name = "adler"
+name = "tilebox"
 url = "https://pypi.adler-x.snamber.com"
 default = true
 
@@ -18,7 +18,7 @@ secondary = true
 python = "^3.8"
 matplotlib = "^3.5.1"
 numpy = "^1.22.2"
-tilebox-processing = {path = "../py-tilebox-processing", develop = true}
+tilebox-processing = "^0.2"
 typer = "^0.4.1"
 
 [tool.poetry.dev-dependencies]

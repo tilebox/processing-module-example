@@ -1,4 +1,3 @@
-import os
 import sys
 
 import matplotlib.cm as cm
@@ -8,10 +7,6 @@ from tilebox_processing.cache import LocalCache
 from tilebox_processing.tasks import new_task, current_task_id
 
 cache = LocalCache()
-
-
-def env():
-    print(os.environ)
 
 
 def calculate_julia():
@@ -61,7 +56,7 @@ def save_figure():
     ytick_labels = np.linspace(y_min, y_max, int(y_height / 0.5))
     ax.set_yticks([(y - y_min) / y_height * im_height for y in ytick_labels])
     ax.set_yticklabels(['{:.1f}'.format(ytick) for ytick in ytick_labels])
-    plt.savefig(f"../{name}")
+    plt.savefig(f"{name}")
 
 
 def combine_outputs():
