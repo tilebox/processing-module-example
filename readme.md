@@ -1,33 +1,29 @@
 # demo-worker
 
 Demo-worker is a demonstration project showing how to create a service and Docker image
-that can act as a worker in the adler-x processing module.
+that can act as a worker in the Tilebox processing module.
 
 The required binaries are installed through Poetry, tasks are created recursively, forming a
 directed acyclic graph (DAG) in the shape of a binary tree.
 
 ## Demo setup
 
-To run the demo locally, first open the `poetry shell`, and start a test-worker.
+To run the demo locally create a namespace, then open the `poetry shell`, and start a worker. Replace the `<description>`
+fields with your own values.
 
 ```commandline
 pyenv-init
 pyenv shell 3.8-dev
 poetry shell
 
-adler-x-task test-worker \
-   --adler-x-working-directory (realpath .) \
-   --host localhost \
-   --port 8086 \
-   --adler-x-cache-directory ~/scratch/test-adler-x-task-worker/cache
+CACHE_DIRECTORY=<cache_directory>
+    tilebox-processing node \
+    --tilebox-processing-namespace-id <namespace_id> \
+    --tilebox-processing-namespace-token <namespace_token>
 ```
 
-Then submit a job to the test-worker.
+Then submit a job to the namespace.
 
 ```commandline
-adler-x-task create-job \
-    --description "Julia test" \
-    --worker-pool-url "http://localhost:8086" \
-    --adler-x-task-server-url "http://localhost:8086" \
-    -- calculate-julia 2000 0 2000
+tilebox processing jobs create --namespace-id <namespace_id> --description julia900 -- calculate-julia 900 0 900 julia-900.png
 ```
