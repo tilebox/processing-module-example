@@ -18,7 +18,7 @@ secondary = true
 python = "^3.8"
 matplotlib = "^3.5.1"
 numpy = "^1.22.2"
-tilebox-processing = "^0.2"
+tilebox-processing = "*"
 typer = "^0.4.1"
 
 [tool.poetry.dev-dependencies]
@@ -26,9 +26,9 @@ pylint = "^2.12.2"
 pytest = "^7.0.1"
 
 [tool.poetry.scripts]
-calculate-julia = "demo_worker.main:calculate_julia"
-combine-outputs = "demo_worker.main:combine_outputs"
-save-figure = "demo_worker.main:save_figure"
+calculate-julia = "demo_worker.workflow:calculate_julia"
+combine-outputs = "demo_worker.workflow:combine_outputs"
+save-figure = "demo_worker.workflow:save_figure"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
