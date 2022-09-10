@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "demo-worker"
+name = "julia-set"
 version = "0.1.0"
 description = ""
 authors = ["Stefan Amberger <1277330+snamber@users.noreply.github.com>"]
@@ -26,9 +26,9 @@ pylint = "^2.12.2"
 pytest = "^7.0.1"
 
 [tool.poetry.scripts]
-calculate-julia = "demo_worker.workflow:calculate_julia"
-combine-outputs = "demo_worker.workflow:combine_outputs"
-save-figure = "demo_worker.workflow:save_figure"
+calculate-julia = "julia_set.workflow:calculate_julia"
+combine-outputs = "julia_set.workflow:combine_outputs"
+save-figure = "julia_set.workflow:save_figure"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

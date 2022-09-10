@@ -1,6 +1,6 @@
 
 .idea
-demo_worker/__pycache__
+julia_set/__pycache__
 .DS_Store
 julia-300.png
 julia-750x750.png

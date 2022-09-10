@@ -12,7 +12,7 @@ ADD poetry.lock pyproject.toml ./
 RUN poetry config repositories.tilebox https://pypi.adler-x.snamber.com
 RUN poetry config http-basic.tilebox __token__ $TILEBOX_API_KEY
 RUN poetry config virtualenvs.in-project true
-RUN poetry install --no-dev
+RUN poetry install --only main
 ENV PATH "/app/.venv/bin/:${PATH}"
 
 # Install the tilebox-processing binary
