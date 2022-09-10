@@ -3,15 +3,18 @@ import sys
 
 import numpy as np
 from matplotlib import pyplot as plt, cm as cm
-from tilebox_processing.cache import GoogleStorageCache
+from tilebox_processing.cache import GoogleStorageCache, LocalCache
 from tilebox_processing.tasks import current_task_id, new_task
 
-from demo_worker.main import concatenate_rows, julia
+from julia_set.main import concatenate_rows, julia
 
 OUTPUT_CLUSTER = os.getenv("JULIA_OUTPUT_CLUSTER", "default")
 COMPUTE_CLUSTER = os.getenv("JULIA_COMPUTE_CLUSTER", "default")
 
-cache = GoogleStorageCache()
+if os.getenv("TILEBOX_CACHE_DIRECTORY"):
+    cache = LocalCache()
+else:
+    cache = GoogleStorageCache()
 
 
 def combine_outputs():
