@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt, cm as cm
 
 
-def julia(imsize, start, end: int) -> np.array:
+def calculate_julia(imsize, start, end: int) -> np.array:
     # Image width and height; parameters for the plot
     im_width, im_height = imsize, end - start
 
