@@ -1,12 +1,10 @@
 import os
 import sys
 
-import numpy as np
-from matplotlib import pyplot as plt, cm as cm
 from tilebox_processing.cache import GoogleStorageCache, LocalCache
 from tilebox_processing.tasks import current_task_id, new_task
 
-from julia_set.main import concatenate_rows, julia
+from julia_set.main import concatenate_rows, julia, save_figure
 
 OUTPUT_CLUSTER = os.getenv("JULIA_OUTPUT_CLUSTER", "default")
 COMPUTE_CLUSTER = os.getenv("JULIA_COMPUTE_CLUSTER", "default")
@@ -17,7 +15,7 @@ else:
     cache = GoogleStorageCache()
 
 
-def combine_outputs():
+def combine_outputs_task():
     target, task1, task2 = sys.argv[1], sys.argv[2], sys.argv[3]
 
     print("combining output of previous tasks")
@@ -27,34 +25,17 @@ def combine_outputs():
     cache.save(target, concatenate_rows(arr1, arr2), "output")
 
 
-def save_figure():
+def save_figure_task():
     task = sys.argv[1]
     imsize = int(sys.argv[2])
     name = sys.argv[3]
     print(f"saving figure... to {name}")
     arr = cache.load(task, "output")
 
-    im_width, im_height = imsize, imsize
-
-    x_min, x_max = -1.5, 1.5
-    x_width = x_max - x_min
-    y_min, y_max = -1.5, 1.5
-    y_height = y_max - y_min
-
-    # Create the image
-    fig, ax = plt.subplots(figsize=(imsize / 100, imsize / 100), dpi=100)
-    ax.imshow(arr, interpolation='nearest', cmap=cm.hot)
-    # Set the tick labels to the coordinates of z0 in the complex plane
-    xtick_labels = np.linspace(x_min, x_max, int(x_width / 0.5))
-    ax.set_xticks([(x - x_min) / x_width * im_width for x in xtick_labels])
-    ax.set_xticklabels(['{:.1f}'.format(xtick) for xtick in xtick_labels])
-    ytick_labels = np.linspace(y_min, y_max, int(y_height / 0.5))
-    ax.set_yticks([(y - y_min) / y_height * im_height for y in ytick_labels])
-    ax.set_yticklabels(['{:.1f}'.format(ytick) for ytick in ytick_labels])
-    plt.savefig(f"{name}")
+    save_figure(name, imsize, imsize, imsize, arr)
 
 
-def calculate_julia():
+def calculate_julia_task():
     """ calculate starts """
     print("started calculation of julia sub-set")
     size, start, end, name = int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]), sys.argv[4]

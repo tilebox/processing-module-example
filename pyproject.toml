@@ -26,9 +26,9 @@ pylint = "^2.12.2"
 pytest = "^7.0.1"
 
 [tool.poetry.scripts]
-calculate-julia = "julia_set.workflow:calculate_julia"
-combine-outputs = "julia_set.workflow:combine_outputs"
-save-figure = "julia_set.workflow:save_figure"
+calculate-julia = "julia_set.workflow:calculate_julia_task"
+combine-outputs = "julia_set.workflow:combine_outputs_task"
+save-figure = "julia_set.workflow:save_figure_task"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

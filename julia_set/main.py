@@ -1,8 +1,5 @@
 import numpy as np
-
-
-def concatenate_rows(rows_top, rows_bottom: np.array) -> np.array:
-    return np.concatenate((rows_top, rows_bottom), axis=1)
+from matplotlib import pyplot as plt, cm as cm
 
 
 def julia(imsize, start, end: int) -> np.array:
@@ -33,3 +30,25 @@ def julia(imsize, start, end: int) -> np.array:
             ratio = nit / nit_max
             arr[ix, iy - start] = ratio
     return arr
+
+
+def concatenate_rows(rows_top, rows_bottom: np.array) -> np.array:
+    return np.concatenate((rows_top, rows_bottom), axis=1)
+
+
+def save_figure(name, im_height, im_width, imsize, arr):
+    x_min, x_max = -1.5, 1.5
+    x_width = x_max - x_min
+    y_min, y_max = -1.5, 1.5
+    y_height = y_max - y_min
+    # Create the image
+    fig, ax = plt.subplots(figsize=(imsize / 100, imsize / 100), dpi=100)
+    ax.imshow(arr, interpolation='nearest', cmap=cm.hot)
+    # Set the tick labels to the coordinates of z0 in the complex plane
+    xtick_labels = np.linspace(x_min, x_max, int(x_width / 0.5))
+    ax.set_xticks([(x - x_min) / x_width * im_width for x in xtick_labels])
+    ax.set_xticklabels(['{:.1f}'.format(xtick) for xtick in xtick_labels])
+    ytick_labels = np.linspace(y_min, y_max, int(y_height / 0.5))
+    ax.set_yticks([(y - y_min) / y_height * im_height for y in ytick_labels])
+    ax.set_yticklabels(['{:.1f}'.format(ytick) for ytick in ytick_labels])
+    plt.savefig(f"{name}")
